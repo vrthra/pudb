@@ -492,8 +492,10 @@ def parse_breakpoints(lines):
                         myarg = arg[:at].strip()
                         if re.search(myarg, line):
                             lineno = l+1+int(arg[at+1:])
-                            if get_breakpoint_invalid_reason(filename, lineno) is None:
-                                breakpoints.append((filename, lineno, False, cond, funcname))
+                            for i in range(lineno, lineno+10):
+                                if get_breakpoint_invalid_reason(filename, i) is None:
+                                    breakpoints.append((filename, i, False, cond, funcname))
+                                    break
                 continue
         else:
             continue
