@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 
 import os
+import re
 import sys
 
 from pudb.py3compat import ConfigParser
@@ -455,7 +456,7 @@ def parse_breakpoints(lines):
 
     breakpoints = []
     for arg in lines:
-        if not arg:
+        if not arg or arg[0] == '#':
             continue
         arg = arg[1:]
 
@@ -485,6 +486,14 @@ def parse_breakpoints(lines):
             try:
                 lineno = int(arg)
             except ValueError:
+                with open(f) as myf:
+                    for l, line in enumerate(myf.readlines()):
+                        at = arg.find('@')
+                        myarg = arg[:at].strip()
+                        if re.search(myarg, line):
+                            lineno = l+1+int(arg[at+1:])
+                            if get_breakpoint_invalid_reason(filename, lineno) is None:
+                                breakpoints.append((filename, lineno, False, cond, funcname))
                 continue
         else:
             continue
