@@ -638,9 +638,6 @@ class DebuggerUI(FrameVarInfoKeeper):
 
         self.cmdline_edit_bar = urwid.Columns([
                 self.cmdline_edit_sigwrap,
-                ("fixed", 10, AttrMap(
-                    urwid.Button("Clear", clear_cmdline_history),
-                    "command line clear button", "command line focused button"))
                 ])
 
         self.cmdline_pile = urwid.Pile([
