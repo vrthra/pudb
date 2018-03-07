@@ -45,16 +45,11 @@ CONFIG = load_config()
 save_config(CONFIG)
 
 HELP_TEXT = """\
-Welcome to PuDB, the Python Urwid debugger.
--------------------------------------------
-
-(This help screen is scrollable. Hit Page Down to see more.)
-
 Keys:
     Ctrl-p - edit preferences
 
-    n - step over ("next")
-    s - step into
+    ctrl n - step over ("next")
+    ctrl s - step into
     c - continue
     r/f - finish current function
     t - run to cursor
@@ -82,16 +77,9 @@ Keys:
     B - focus breakpoint list
     C - focus code
 
-    f1/?/H - show this help screen
-    q - quit
-
-    Ctrl-c - when in continue mode, break back to PuDB
-
-    Ctrl-l - redraw screen
-
 Shell-related:
     ! - open the external shell (configured in the settings)
-    Ctrl-x - toggle the internal shell focus
+    Ctrl-x,: - toggle the internal shell focus
 
     +/- - grow/shrink inline shell (active in command line history)
     _/= - minimize/maximize inline shell (active in command line history)
@@ -117,44 +105,15 @@ Keys in variables list:
     enter - edit options (also to delete)
 
 Keys in stack list:
-
     enter - jump to frame
 
 Keys in breakpoints view:
-
     enter - edit breakpoint
     d - delete breakpoint
     e - enable/disable breakpoint
 
-License:
---------
-
-PuDB is licensed to you under the MIT/X Consortium license:
-
-Copyright (c) 2009-16 Andreas Kloeckner and contributors
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+License: f1
 """
-
 
 # {{{ debugger interface
 
@@ -1859,6 +1818,9 @@ class DebuggerUI(FrameVarInfoKeeper):
 
         def help(w, size, key):
             self.message(HELP_TEXT, title="PuDB Help")
+
+        def license(w, size, key):
+            self.message(__license__, title="PuDB License")
 
         self.top.listen("o", show_output)
         self.top.listen("ctrl r", reload_breakpoints)
