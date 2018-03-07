@@ -672,7 +672,7 @@ class DebuggerUI(FrameVarInfoKeeper):
 
         self.rhs_col = urwid.Pile([
             ("weight", float(CONFIG["variables_weight"]), AttrMap(urwid.Pile([
-                ("flow", urwid.Text(make_hotkey_markup("_Variables:"))),
+                ("flow", urwid.Text(make_hotkey_markup("_Variables (srtc):"))),
                 AttrMap(self.var_list, "variables"),
                 ]), None, "focused sidebar"),),
             ("weight", float(CONFIG["stack_weight"]), AttrMap(urwid.Pile([
