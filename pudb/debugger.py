@@ -1805,6 +1805,9 @@ class DebuggerUI(FrameVarInfoKeeper):
                 self.columns.set_focus(self.rhs_col_sigwrap)
                 self.rhs_col.set_focus(self.rhs_col.widget_list[subself.idx])
 
+        def fquit(w, size, key):
+            sys.exit(1)
+
         def quit(w, size, key):
             self.debugger.set_quit()
             end()
@@ -1831,6 +1834,7 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.top.listen("S", RHColumnFocuser(1))
         self.top.listen("B", RHColumnFocuser(2))
 
+        self.top.listen("Q", fquit)
         self.top.listen("q", quit)
         self.top.listen("ctrl p", do_edit_config)
         self.top.listen("ctrl l", redraw_screen)
