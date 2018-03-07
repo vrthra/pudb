@@ -1402,8 +1402,8 @@ class DebuggerUI(FrameVarInfoKeeper):
                         self.debugger.set_frame_index(
                                 self.translate_ui_stack_index(pos))
 
-        self.source_sigwrap.listen("n", next)
-        self.source_sigwrap.listen("s", step)
+        self.source_sigwrap.listen("ctrl n", next)
+        self.source_sigwrap.listen("ctrl s", step)
         self.source_sigwrap.listen("f", finish)
         self.source_sigwrap.listen("r", finish)
         self.source_sigwrap.listen("c", cont)
@@ -1422,8 +1422,8 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.source_sigwrap.listen(",", search_previous)
         self.source_sigwrap.listen(".", search_next)
 
-        self.source_sigwrap.listen("home", move_home)
-        self.source_sigwrap.listen("end", move_end)
+        self.source_sigwrap.listen("^", move_home)
+        self.source_sigwrap.listen("$", move_end)
         self.source_sigwrap.listen("g", move_home)
         self.source_sigwrap.listen("G", move_end)
         self.source_sigwrap.listen("L", go_to_line)
@@ -1634,6 +1634,21 @@ class DebuggerUI(FrameVarInfoKeeper):
             self.cmdline_edit.edit_text = self.cmdline_edit.edit_text[pos:]
             self.cmdline_edit.edit_pos = 0
 
+        def top_take_focus(w, size, key):
+            self.columns.set_focus(self.lhs_col)
+            if self.lhs_col.get_focus() is self.cmdline_sigwrap:
+                self.lhs_col.set_focus(self.source_attr)
+            else:
+                pass
+
+        def cmdline_take_focus(w, size, key):
+            self.columns.set_focus(self.lhs_col)
+            if self.lhs_col.get_focus() is self.cmdline_sigwrap:
+                pass
+            else:
+                self.cmdline_pile.set_focus(self.cmdline_edit_bar)
+                self.lhs_col.set_focus(self.cmdline_sigwrap)
+
         def toggle_cmdline_focus(w, size, key):
             self.columns.set_focus(self.lhs_col)
             if self.lhs_col.get_focus() is self.cmdline_sigwrap:
@@ -1646,15 +1661,19 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.cmdline_edit_sigwrap.listen("ctrl v", cmdline_append_newline)
         self.cmdline_edit_sigwrap.listen("enter", cmdline_exec)
         self.cmdline_edit_sigwrap.listen("ctrl n", cmdline_history_next)
+        self.cmdline_edit_sigwrap.listen("up", cmdline_history_prev)
         self.cmdline_edit_sigwrap.listen("ctrl p", cmdline_history_prev)
-        self.cmdline_edit_sigwrap.listen("esc", toggle_cmdline_focus)
+        self.cmdline_edit_sigwrap.listen("down", cmdline_history_prev)
+        #self.cmdline_edit_sigwrap.listen("esc", top_take_focus)
         self.cmdline_edit_sigwrap.listen("ctrl d", toggle_cmdline_focus)
         self.cmdline_edit_sigwrap.listen("ctrl a", cmdline_start_of_line)
         self.cmdline_edit_sigwrap.listen("ctrl e", cmdline_end_of_line)
         self.cmdline_edit_sigwrap.listen("ctrl w", cmdline_del_word)
         self.cmdline_edit_sigwrap.listen("ctrl u", cmdline_del_to_start_of_line)
 
-        self.top.listen("ctrl x", toggle_cmdline_focus)
+        self.top.listen("ctrl x", top_take_focus)
+        self.top.listen(":", cmdline_take_focus)
+        self.cmdline_sigwrap.listen("esc", top_take_focus)
 
         # {{{ command line sizing
 
@@ -1851,7 +1870,7 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.top.listen("q", quit)
         self.top.listen("ctrl p", do_edit_config)
         self.top.listen("ctrl l", redraw_screen)
-        self.top.listen("f1", help)
+        self.top.listen("f1", license)
         self.top.listen("?", help)
 
         # }}}
