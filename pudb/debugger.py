@@ -1711,7 +1711,9 @@ class DebuggerUI(FrameVarInfoKeeper):
 
         def show_output(w, size, key):
             self.screen.stop()
-            raw_input("Hit Enter to return:")
+            os.system("stty -echo")
+            raw_input("")
+            os.system("stty echo")
             self.screen.start()
 
         def reload_breakpoints(w, size, key):
