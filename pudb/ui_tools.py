@@ -284,7 +284,7 @@ class SearchController(object):
 
 class SearchBox(urwid.Edit):
     def __init__(self, controller):
-        urwid.Edit.__init__(self, [("label", "Search: ")], "")
+        urwid.Edit.__init__(self, [("label", "Search: (.,)")], "")
         self.controller = controller
 
     def restart_search(self):
