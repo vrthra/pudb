@@ -627,7 +627,7 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.cmdline_contents = urwid.SimpleFocusListWalker([])
         self.cmdline_list = urwid.ListBox(self.cmdline_contents)
         self.cmdline_edit = urwid.Edit([
-            ("command line prompt", ">>> ")
+            ("command line prompt", "py| ")
             ])
         cmdline_edit_attr = urwid.AttrMap(self.cmdline_edit, "command line edit")
         self.cmdline_edit_sigwrap = SignalWrap(
