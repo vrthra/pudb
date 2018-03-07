@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from __future__ import absolute_import, division, print_function
 
 __copyright__ = """
@@ -1402,8 +1401,8 @@ class DebuggerUI(FrameVarInfoKeeper):
                         self.debugger.set_frame_index(
                                 self.translate_ui_stack_index(pos))
 
-        self.source_sigwrap.listen("ctrl n", next)
-        self.source_sigwrap.listen("ctrl s", step)
+        self.source_sigwrap.listen("n", next)
+        self.source_sigwrap.listen("s", step)
         self.source_sigwrap.listen("f", finish)
         self.source_sigwrap.listen("r", finish)
         self.source_sigwrap.listen("c", cont)
@@ -1666,12 +1665,13 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.cmdline_edit_sigwrap.listen("down", cmdline_history_prev)
         #self.cmdline_edit_sigwrap.listen("esc", top_take_focus)
         self.cmdline_edit_sigwrap.listen("ctrl d", toggle_cmdline_focus)
+        self.cmdline_edit_sigwrap.listen("ctrl x", toggle_cmdline_focus)
         self.cmdline_edit_sigwrap.listen("ctrl a", cmdline_start_of_line)
         self.cmdline_edit_sigwrap.listen("ctrl e", cmdline_end_of_line)
         self.cmdline_edit_sigwrap.listen("ctrl w", cmdline_del_word)
         self.cmdline_edit_sigwrap.listen("ctrl u", cmdline_del_to_start_of_line)
 
-        self.top.listen("ctrl x", top_take_focus)
+        self.top.listen("ctrl x", toggle_cmdline_focus)
         self.top.listen(":", cmdline_take_focus)
         self.cmdline_sigwrap.listen("esc", top_take_focus)
 
