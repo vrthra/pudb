@@ -883,6 +883,32 @@ class DebuggerUI(FrameVarInfoKeeper):
                 fvi.watches.append(we)
                 self.update_var_view()
 
+
+        def grow_sidebar(w, size, key):
+            from pudb.settings import save_config
+
+            _, weight = self.columns.column_types[1]
+
+            if weight < 5:
+                weight += 1
+                CONFIG["sidebar_width"] = weight
+                save_config(CONFIG)
+                self.columns.column_types[1] = "weight", weight
+                self.columns._invalidate()
+
+        def shrink_sidebar(w, size, key):
+            from pudb.settings import save_config
+
+            _, weight = self.columns.column_types[1]
+
+            if weight > 0:
+                weight -= 1
+                CONFIG["sidebar_width"] = weight
+                save_config(CONFIG)
+                self.columns.column_types[1] = "weight", weight
+                self.columns._invalidate()
+
+
         self.var_list.listen("\\", change_var_state)
         self.var_list.listen("t", change_var_state)
         self.var_list.listen("r", change_var_state)
@@ -899,6 +925,9 @@ class DebuggerUI(FrameVarInfoKeeper):
 
         self.var_list.listen("[", partial(change_rhs_box, 'variables', 0, -1))
         self.var_list.listen("]", partial(change_rhs_box, 'variables', 0, 1))
+
+        self.var_list.listen("{", grow_sidebar)
+        self.var_list.listen("}", shrink_sidebar)
 
         # }}}
 
@@ -925,6 +954,8 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.stack_list.listen("[", partial(change_rhs_box, 'stack', 1, -1))
         self.stack_list.listen("]", partial(change_rhs_box, 'stack', 1, 1))
 
+        self.stack_list.listen("{", grow_sidebar)
+        self.stack_list.listen("}", shrink_sidebar)
         # }}}
 
         # {{{ breakpoint listeners
@@ -1047,6 +1078,8 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.bp_list.listen("[", partial(change_rhs_box, 'breakpoints', 2, -1))
         self.bp_list.listen("]", partial(change_rhs_box, 'breakpoints', 2, 1))
 
+        self.bp_list.listen("{", grow_sidebar)
+        self.bp_list.listen("}", shrink_sidebar)
         # }}}
 
         # {{{ source listeners
@@ -1402,6 +1435,10 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.source_sigwrap.listen("u", move_stack_up)
         self.source_sigwrap.listen("d", move_stack_down)
 
+        self.source_sigwrap.listen("{", grow_sidebar)
+        self.source_sigwrap.listen("}", shrink_sidebar)
+
+
         # }}}
 
         # {{{ command line listeners
@@ -1676,34 +1713,10 @@ class DebuggerUI(FrameVarInfoKeeper):
             self.columns.column_types[1] = "weight", weight
             self.columns._invalidate()
 
-        def grow_sidebar(w, size, key):
-            from pudb.settings import save_config
-
-            _, weight = self.columns.column_types[1]
-
-            if weight < 5:
-                weight *= 1.25
-                CONFIG["sidebar_width"] = weight
-                save_config(CONFIG)
-                self.columns.column_types[1] = "weight", weight
-                self.columns._invalidate()
-
-        def shrink_sidebar(w, size, key):
-            from pudb.settings import save_config
-
-            _, weight = self.columns.column_types[1]
-
-            if weight > 1/5:
-                weight /= 1.25
-                CONFIG["sidebar_width"] = weight
-                save_config(CONFIG)
-                self.columns.column_types[1] = "weight", weight
-                self.columns._invalidate()
-
-        self.rhs_col_sigwrap.listen("=", max_sidebar)
-        self.rhs_col_sigwrap.listen("+", grow_sidebar)
-        self.rhs_col_sigwrap.listen("_", min_sidebar)
-        self.rhs_col_sigwrap.listen("-", shrink_sidebar)
+        self.rhs_col_sigwrap.listen("(", max_sidebar)
+        self.rhs_col_sigwrap.listen(")", min_sidebar)
+        self.rhs_col_sigwrap.listen("{", grow_sidebar)
+        self.rhs_col_sigwrap.listen("}", shrink_sidebar)
 
         # }}}
 
