@@ -922,11 +922,11 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.var_list.listen("n", insert_watch)
         self.var_list.listen("insert", insert_watch)
 
-        self.var_list.listen("[", partial(change_rhs_box, 'variables', 0, -1))
-        self.var_list.listen("]", partial(change_rhs_box, 'variables', 0, 1))
+        self.var_list.listen("ctrl down", partial(change_rhs_box, 'variables', 0, -1))
+        self.var_list.listen("ctrl up", partial(change_rhs_box, 'variables', 0, 1))
 
-        self.var_list.listen("{", grow_sidebar)
-        self.var_list.listen("}", shrink_sidebar)
+        self.var_list.listen("ctrl left", grow_sidebar)
+        self.var_list.listen("ctrl right", shrink_sidebar)
 
         # }}}
 
@@ -950,11 +950,11 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.stack_list.listen("u", move_stack_up)
         self.stack_list.listen("d", move_stack_down)
 
-        self.stack_list.listen("[", partial(change_rhs_box, 'stack', 1, -1))
-        self.stack_list.listen("]", partial(change_rhs_box, 'stack', 1, 1))
+        self.stack_list.listen("ctrl down", partial(change_rhs_box, 'stack', 1, -1))
+        self.stack_list.listen("ctrl up", partial(change_rhs_box, 'stack', 1, 1))
 
-        self.stack_list.listen("{", grow_sidebar)
-        self.stack_list.listen("}", shrink_sidebar)
+        self.stack_list.listen("ctrl left", grow_sidebar)
+        self.stack_list.listen("ctrl right", shrink_sidebar)
         # }}}
 
         # {{{ breakpoint listeners
@@ -1074,11 +1074,11 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.bp_list.listen("s", save_breakpoints)
         self.bp_list.listen("e", enable_disable_breakpoint)
 
-        self.bp_list.listen("[", partial(change_rhs_box, 'breakpoints', 2, -1))
-        self.bp_list.listen("]", partial(change_rhs_box, 'breakpoints', 2, 1))
+        self.bp_list.listen("ctrl down", partial(change_rhs_box, 'breakpoints', 2, -1))
+        self.bp_list.listen("ctrl up", partial(change_rhs_box, 'breakpoints', 2, 1))
 
-        self.bp_list.listen("{", grow_sidebar)
-        self.bp_list.listen("}", shrink_sidebar)
+        self.bp_list.listen("ctrl left", grow_sidebar)
+        self.bp_list.listen("ctrl right", shrink_sidebar)
         # }}}
 
         # {{{ source listeners
@@ -1434,8 +1434,8 @@ class DebuggerUI(FrameVarInfoKeeper):
         self.source_sigwrap.listen("u", move_stack_up)
         self.source_sigwrap.listen("d", move_stack_down)
 
-        self.source_sigwrap.listen("{", grow_sidebar)
-        self.source_sigwrap.listen("}", shrink_sidebar)
+        self.source_sigwrap.listen("ctrl left", grow_sidebar)
+        self.source_sigwrap.listen("ctrl right", shrink_sidebar)
 
 
         # }}}
@@ -1702,9 +1702,9 @@ class DebuggerUI(FrameVarInfoKeeper):
                 self.lhs_col._invalidate()
 
         self.cmdline_sigwrap.listen("=", max_cmdline)
-        self.cmdline_sigwrap.listen("+", grow_cmdline)
+        self.cmdline_sigwrap.listen("ctrl up", grow_cmdline)
         self.cmdline_sigwrap.listen("_", min_cmdline)
-        self.cmdline_sigwrap.listen("-", shrink_cmdline)
+        self.cmdline_sigwrap.listen("ctrl down", shrink_cmdline)
 
         # }}}
 
@@ -1734,8 +1734,8 @@ class DebuggerUI(FrameVarInfoKeeper):
 
         self.rhs_col_sigwrap.listen("(", max_sidebar)
         self.rhs_col_sigwrap.listen(")", min_sidebar)
-        self.rhs_col_sigwrap.listen("{", grow_sidebar)
-        self.rhs_col_sigwrap.listen("}", shrink_sidebar)
+        self.rhs_col_sigwrap.listen("ctrl left", grow_sidebar)
+        self.rhs_col_sigwrap.listen("ctrl right", shrink_sidebar)
 
         # }}}
 
